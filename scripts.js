@@ -10,5 +10,16 @@ function fibs(num) {
   }
   return arr;
 }
+// console.log(fibs(8));
 
-console.log(fibs(8));
+function fibsRec(num, arr = [0, 1]) {
+  if (num <= 1) {
+    return [0];
+  } else {
+    if (num > 2) {
+      arr.push(arr[arr.length - 1] + arr[arr.length - 2]);
+    }
+    return fibsRec(num - 1, arr).concat(arr[num - 1]);
+  }
+}
+console.log(fibsRec(1));
