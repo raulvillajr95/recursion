@@ -25,67 +25,50 @@ function fibsRec(num, arr = [0, 1]) {
 // console.log(fibsRec(8));
 
 // Merge sort
-// base could could be when array length reaches 1
-// re-merging: by index is 1 less than the other
-// [2,3,9,8,9,8,7,3]
-// [2,3,9,8] | [9,8,7,3]
-// [2,3] | [9,8] | [9,8] | [7,3]
-// [2] | [3] | [9] | [8] | [9] | [8] | [7] | [3]
-// [2, 3] | [8, 9] | [8, 9] | [3 , 7]
-// [2, 3, 8, 9] | [3, 7, 8, 9]
-// [2, 3, 3, 7, 8, 8, 9, 9]
-function mergeSort(arr, arr2 = []) {
-  if (arr.length <= 2) {
-    console.log(arr, '<2');
-    // use sorter() to sort comparing indexes
-    return arr.sort((a, b) => a - b);
-  } else {
-    console.log(arr, 'else');
-    return sorter(
-      mergeSort(arr.slice(0, Math.floor(arr.length / 2))),
-      mergeSort(arr.slice(Math.floor(arr.length / 2)))
-    );
-  }
-}
-console.log(mergeSort([2, 1, 9, 8, 9, 10, 7, 80, 39, 392, 3]));
+function mergeSorter(arr) {
+  // sort 2 arrays into 1
+  const sorter = (arr1, arr2, sorted = []) => {
+    if (arr1.length === 0 || arr2.length === 0) {
+      if (arr1.length === 0) {
+        sorted = [...sorted, ...arr2];
+      } else if (arr2.length === 0) {
+        sorted = [...sorted, ...arr1];
+      }
+      return sorted;
+    } else {
+      if (arr1[0] <= arr2[0]) {
+        sorted.push(arr1[0]);
+        arr1.shift();
+      }
+      if (arr1[0] > arr2[0]) {
+        sorted.push(arr2[0]);
+        arr2.shift();
+      }
+      return sorter(arr1, arr2, sorted);
+    }
+  };
 
-// Sort 2 arrays
-// go by indeces compare 1 1 and the move on from the one moved
-function sorter(
-  arr1,
-  arr2,
-  counter1 = 0,
-  counter2 = 0,
-  sorted = [],
-  counter = arr1.length + arr2.length - 1
-) {
-  // console.log(counter, 'top');
-  if (arr1.length === 0 || arr2.length === 0) {
-    if (arr1.length === 0) {
-      console.log('arr1 empty', arr2);
-      sorted = [...sorted, ...arr2];
-      console.log(sorted, 'concat??', arr2);
-    } else if (arr2.length === 0) {
-      console.log('arr2 empty');
-      // sorted.concat(arr1);
-      sorted = [...sorted, ...arr1];
+  const mergeSort = (arr) => {
+    if (arr.length <= 2) {
+      return arr.sort((a, b) => a - b);
+    } else {
+      return sorter(
+        mergeSort(arr.slice(0, Math.floor(arr.length / 2))),
+        mergeSort(arr.slice(Math.floor(arr.length / 2)))
+      );
     }
-    // console.log(counter, 'if');
-    // console.log(arr1[0], arr2[0], 'if compare', counter);
-    return sorted;
-  } else {
-    if (arr1[0] <= arr2[0]) {
-      console.log('greater');
-      sorted.push(arr1[0]);
-      arr1.shift();
-    }
-    if (arr1[0] > arr2[0]) {
-      console.log('less');
-      sorted.push(arr2[0]);
-      arr2.shift();
-    }
-    // console.log(arr1[0], arr2[0], 'else compare', counter);
-    return sorter(arr1, arr2, counter1, counter2, sorted, counter - 1);
-  }
+  };
+
+  return mergeSort(arr);
 }
-// console.log(sorter([2, 2, 4, 7], [2, 5, 500]));
+console.log(
+  mergeSorter([
+    769, 75, 988, 51, 551, 462, 173, 428, 412, 864, 584, 452, 198, 480, 47, 368,
+    955, 625, 844, 253, 458, 696, 246, 725, 548, 689, 282, 746, 201, 104, 625,
+    894, 450, 621, 622, 671, 141, 335, 510, 542, 330, 959, 496, 412, 937, 716,
+    594, 701, 613, 493, 937, 996, 473, 372, 421, 526, 171, 820, 638, 688, 935,
+    412, 632, 207, 528, 522, 687, 745, 325, 400, 302, 116, 84, 838, 13, 274,
+    344, 508, 778, 429, 861, 761, 513, 462, 285, 853, 166, 229, 145, 191, 25,
+    387, 512, 411, 573, 947, 340, 932, 474, 66,
+  ])
+);
